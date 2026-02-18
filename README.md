@@ -1,6 +1,7 @@
 # Notes + Snippets
 As of January 2026, still deciding whether or not it's worth it to migrate all my snippets and little scripts to here from another github account and other git repos (hosted  - my domain)
 
+
 ## Local Scripts (shell, etc.)
 
 ### Daily Git (Bitbucket) repo report - checks local repos for uncommitted changes, gets log of changes
@@ -16,8 +17,8 @@ todo: get user mentions
 ## Jupyter Notebooks
 - [ ] #TODO
 ## Snippets/Useful code/etc.
-## JS
-- [ ] #TODO
+## JS Bookmarklets
+** see udemy bookmarklet to download transcript from Udemy lesson ** 
 ## SQL
 ### introspection (PostgreSQL)
 see postgresql related files here.
