@@ -24,6 +24,22 @@ write to stdout and to file
 command | tee file.txt
 ```
 
+split a string by a separator into an array of key, value pairs, then set a variable as the key name to the value
+**zsh vs bash**: if zsh: should be `read -A array`, for bash `read -r -a array`
+- [ ] #TODO check zsh bad assignment, otherwise works (could be extra pipe)
+```sh
+var="HOST=localhost|PORT=1234|SERVICE_NAME=myservice|OTHER_KEY=othervalue|"
+IFS='|' read -A array <<< "$var"
+for element in "${array[@]}"
+do
+    var=`echo $element | cut -d"=" -f1`
+    val=`echo $element | cut -d"=" -f2`
+    declare $var=$val
+done
+unset
+echo "host: ${HOST}"
+```
+
 ## Mac Snippets (terminal/cli with osascript)
 Shows desktop notification is volume is low  (under 30) or muted - will have to grant terminal permissions
 ```sh
