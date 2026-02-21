@@ -18,6 +18,12 @@ see postgresql related files in the sql directory
 ## Slack
 - [ ] #TODO - upload/use .ipynb file - get user's slack reminders in pretty format
 
+## Shell/Bash/*sh
+write to stdout and to file
+```sh
+command | tee file.txt
+```
+
 ## Mac Snippets (terminal/cli with osascript)
 Shows desktop notification is volume is low  (under 30) or muted - will have to grant terminal permissions
 ```sh
