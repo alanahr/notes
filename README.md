@@ -28,4 +28,5 @@ see postgresql related files in the sql directory
 get this platform/architecture
 ```python
 python3 -c "import sys; import platform; print(f'{sys.platform}, {platform.architecture()}, {platform.processor()}, {platform.machine()}');"
+#> darwin, ('64bit', 'Mach-O'), arm, arm64
 ```
