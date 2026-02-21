@@ -30,3 +30,14 @@ get this platform/architecture
 python3 -c "import sys; import platform; print(f'{sys.platform}, {platform.architecture()}, {platform.processor()}, {platform.machine()}');"
 #> darwin, ('64bit', 'Mach-O'), arm, arm64
 ```
+
+```python
+echo $(python3 <<EOF
+import sys
+if sys.prefix == sys.base_prefix:
+    print("No, you are not in a virtual environment.")
+else:
+    print("Yes, you are in a virtual environment.")
+EOF
+)
+```
