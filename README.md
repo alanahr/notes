@@ -23,4 +23,9 @@ see postgresql related files in the sql directory
 
 ## Jupyter Notebooks
 - [ ] #TODO
-... 
+
+## Python
+get this platform/architecture
+```python
+python3 -c "import sys; import platform; print(f'{sys.platform}, {platform.architecture()}, {platform.processor()}, {platform.machine()}');"
+```
