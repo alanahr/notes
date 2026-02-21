@@ -169,3 +169,66 @@ JOIN
     information_schema.referential_constraints ref ON tab.constraint_name = ref.constraint_name
 WHERE 
     ref.referenced_table_name = 'your_table_name_here';
+
+-- #todo honestly not sure what is going on below -- just pasting the queries I have in various files; need to test this out
+
+SELECT table_catalog,
+       table_schema,
+       ordinal_position,
+       table_name,
+       column_name,
+       column_default,
+       is_nullable,
+       data_type,
+       character_octet_length,
+       numeric_precision,
+       numeric_precision_radix,
+       numeric_scale,
+       datetime_precision,
+       udt_name,
+       description,
+       g.srccols,
+       g.constraints
+FROM (SELECT ic.*, a.description
+      FROM (SELECT pg_class_objoid.relname AS tab,
+                   pg_attribute.attname    AS col,
+                   pg_description.description
+            FROM pg_description
+                     LEFT JOIN
+                 pg_class AS pg_class_objoid ON pg_description.objoid = pg_class_objoid.oid
+                     LEFT JOIN
+                 pg_class AS pg_class_classoid ON pg_description.classoid = pg_class_classoid.oid
+                     LEFT JOIN
+                 pg_attribute ON pg_attribute.attnum = pg_description.objsubid AND
+                                 pg_attribute.attrelid = pg_description.objoid
+            WHERE pg_class_classoid.relname = 'pg_class') a
+               FULL JOIN information_schema.columns ic
+                         on a.col = ic.column_name
+      WHERE ic.table_schema = 'public'
+      ORDER BY ic.table_name ASC) d
+         FULL JOIN
+     (SELECT e.srccols, e.src, CONCAT('[', string_agg(e.cct, ','), ']') as constraints
+      FROM (SELECT CONCAT('{"contype": "', contype, '", "constraint_name": "', o.conname, '", "cols": "',
+                          get_col_names(conrelid, conkey),
+                          '", "coltypes": "', get_col_types(conrelid, conkey), '", "target": "', f.relname,
+                          '", "target_col": "', (SELECT a.attname
+                                                 FROM pg_attribute a
+                                                 WHERE a.attrelid = f.oid
+                                                   AND a.attnum = o.confkey[1]
+                                                   AND a.attisdropped = false), '" }') as cct,
+                   contype, o.conname AS cnstrnt,
+                   m.relname AS src,
+                   get_col_names(conrelid, conkey) srccols,
+                   get_col_types(conrelid, conkey) srccoltyps,
+                   f.relname AS dest,
+                   (SELECT a.attname
+                    FROM pg_attribute a
+                    WHERE a.attrelid = f.oid AND a.attnum = o.confkey[1] AND a.attisdropped = false) AS destcols
+            FROM pg_constraint o
+                     LEFT JOIN pg_class f ON f.oid = o.confrelid
+                     LEFT JOIN pg_class m ON m.oid = o.conrelid
+            WHERE o.contype = 'p'
+               OR o.contype = 'f' AND o.conrelid IN (SELECT oid FROM pg_class c WHERE c.relkind = 'r')) e
+      GROUP BY srccols, src) g
+     ON POSITION(d.column_name IN g.srccols) > 0 AND d.table_name = g.src
+ORDER BY d.table_name, d.ordinal_position ASC
