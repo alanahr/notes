@@ -18,6 +18,18 @@ see postgresql related files in the sql directory
 ## Slack
 - [ ] #TODO - upload/use .ipynb file - get user's slack reminders in pretty format
 
+## Mac Snippets (terminal/cli with osascript)
+Shows desktop notification is volume is low  (under 30) or muted - will have to grant terminal permissions
+```sh
+vol_level=`/usr/bin/osascript -e 'get volume settings'| cut -d" " -f2 | cut -d":" -f2 | cut -d"," -f1`
+muted=`/usr/bin/osascript -e 'get volume settings'| cut -d" " -f8 | cut -d":" -f2 | cut -d"," -f1`
+
+if [[ $vol_level -lt 30 ]] || [[ $muted = "true" ]]; then
+echo "less than 30 or muted"
+osascript -e 'display notification "check your volume" with title "Volume is low"'
+fi
+```
+
 ## Mac Automator
 - [ ] #TODO
 
