@@ -126,3 +126,46 @@ LEFT JOIN
         OR o.contype = 'f' AND o.conrelid IN (SELECT oid FROM pg_class c WHERE c.relkind = 'r')
         ) rc
         ON wc.dep_name = rc.constraint_name);
+--
+-- mysql 
+WITH RECURSIVE TableDependencies AS (
+    -- direct dependencies of the starting table
+    SELECT 
+        TABLE_NAME AS ChildTable,
+        CONSTRAINT_NAME,
+        REFERENCED_TABLE_NAME AS ParentTable
+    FROM 
+        INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+    WHERE 
+        TABLE_SCHEMA = 'your_database_name'
+        AND TABLE_NAME = 'target_table'
+        AND REFERENCED_TABLE_NAME IS NOT NULL
+    
+    UNION ALL
+    -- Recursive member: parents of the parents
+    SELECT 
+        td.ParentTable,
+        kcu.CONSTRAINT_NAME,
+        kcu.REFERENCED_TABLE_NAME
+    FROM 
+        INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu
+    JOIN 
+        TableDependencies td ON kcu.TABLE_NAME = td.ParentTable
+    WHERE 
+        kcu.TABLE_SCHEMA = 'your_database_name'
+        AND kcu.REFERENCED_TABLE_NAME IS NOT NULL
+);
+--
+SELECT DISTINCT ChildTable, ParentTable FROM TableDependencies;
+-- like above but specific by table 
+-- You can query the information_schema.referential_constraints and information_schema.table_constraints tables. This will show you which tables ("Target_Table" or child table) have a foreign key that references another table ("Source_Table" or parent table).
+SELECT 
+    ref.referenced_table_name AS Source_Table, 
+    tab.constraint_name, 
+    tab.table_name AS Target_Table
+FROM 
+    information_schema.table_constraints tab
+JOIN 
+    information_schema.referential_constraints ref ON tab.constraint_name = ref.constraint_name
+WHERE 
+    ref.referenced_table_name = 'your_table_name_here';
