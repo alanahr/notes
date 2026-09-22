@@ -1,6 +1,24 @@
 # Reference (Notes, Notebooks, Snippets, etc.)
 As of Feb 2026, still deciding whether or not it's worth it to migrate all my snippets and little scripts to here from another github account and other git repos (hosted  - my domain)
 
+## Jupyter Notebooks
+
+### GarminGarth
+
+This uses the python garth library to connect to Garmin to get stats and displays charts.
+To run on mac with homebrew, use the shell script to setup a virtual env first.
+Requires numpy, pandas, matplotlib, seaborn, garth.
+
+#### Example Charts
+
+![Garmin chart showing calories by date](calorie_sums.png)
+
+![Garmin chart showing stress over time](stress_over_time.png)
+
+![Garmin chart showing sleep start and stop times](sleep.png)
+
+- [ ] #TODO
+
 ## Browser snippets
 ### JS Bookmarklets
 ** see udemy bookmarklet to download transcript from Udemy lesson ** 
@@ -18,7 +36,33 @@ see postgresql related files in the sql directory
 ## Slack
 - [ ] #TODO - upload/use .ipynb file - get user's slack reminders in pretty format
 
-## Shell/Bash/*sh
+## Mac Automator
+
+- [ ] #TODO
+
+## Snippets
+
+### Python
+
+get this platform/architecture
+```python
+python3 -c "import sys; import platform; print(f'{sys.platform}, {platform.architecture()}, {platform.processor()}, {platform.machine()}');"
+#> darwin, ('64bit', 'Mach-O'), arm, arm64
+```
+
+```python
+echo $(python3 <<EOF
+import sys
+if sys.prefix == sys.base_prefix:
+    print("No, you are not in a virtual environment.")
+else:
+    print("Yes, you are in a virtual environment.")
+EOF
+)
+```
+
+
+### Shell/Bash/*sh
 write to stdout and to file
 ```sh
 command | tee file.txt
@@ -40,7 +84,7 @@ unset
 echo "host: ${HOST}"
 ```
 
-## Mac Snippets (terminal/cli with osascript)
+### Mac Snippets (terminal/cli with osascript)
 Shows desktop notification is volume is low  (under 30) or muted - will have to grant terminal permissions
 ```sh
 vol_level=`/usr/bin/osascript -e 'get volume settings'| cut -d" " -f2 | cut -d":" -f2 | cut -d"," -f1`
@@ -50,28 +94,4 @@ if [[ $vol_level -lt 30 ]] || [[ $muted = "true" ]]; then
 echo "less than 30 or muted"
 osascript -e 'display notification "check your volume" with title "Volume is low"'
 fi
-```
-
-## Mac Automator
-- [ ] #TODO
-
-## Jupyter Notebooks
-- [ ] #TODO
-
-## Python
-get this platform/architecture
-```python
-python3 -c "import sys; import platform; print(f'{sys.platform}, {platform.architecture()}, {platform.processor()}, {platform.machine()}');"
-#> darwin, ('64bit', 'Mach-O'), arm, arm64
-```
-
-```python
-echo $(python3 <<EOF
-import sys
-if sys.prefix == sys.base_prefix:
-    print("No, you are not in a virtual environment.")
-else:
-    print("Yes, you are in a virtual environment.")
-EOF
-)
 ```
