@@ -1,0 +1,29 @@
+[project]
+name = "uv-jupyter"
+version = "0.1.0"
+description = "UV and Jupyter build/run"
+readme = "README.md"
+authors = [
+    { name = "AAR", email = "25590997+alanahr@users.noreply.github.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "garth==0.6.3",
+    "matplotlib>=3.11.2",
+    "mpl-fontkit>=0.5.1",
+    "numpy>=2.5.3",
+    "pandas>=3.0.6",
+    "seaborn>=0.13.2",
+]
+
+[project.scripts]
+uv-jupyter = "uv_jupyter:main"
+
+[build-system]
+requires = ["uv_build>=0.12.17,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.3.0",
+]
