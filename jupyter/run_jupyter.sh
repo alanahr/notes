@@ -1,5 +1,9 @@
 #!/bin/bash
 
+##
+## outdated but works
+##TODO update for 3.11, use updated install best practices
+##
 set -e
 
 d=`date +%m-%d-%Y`
@@ -15,6 +19,7 @@ NOTEBOOK_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd 
 LOG_DIR="${NOTEBOOK_DIR}/logs"
 PY_LIB="python3"
 PY_PATH="/opt/homebrew/bin/python3"
+##TOOD update with 3.11 and then update requirements
 PY_BREW_LIB="python@3.9"
 
 function check_cmd {
